@@ -1,0 +1,233 @@
+// Processing Script ensure to install the Blob.pde as well in a separate tab
+
+import controlP5.*;
+ControlP5 cp5;
+Slider s1; 
+//Textarea myTextarea1;
+//Textarea myTextarea2;
+int myColor = color(0,0,0);
+int sliderTicks2 = 100;
+Slider abc;
+import processing.serial.*;
+Serial myPort;  // The serial port
+float w,q,s;
+
+Blob[] blobs = new Blob[16];
+PShape bot;        // 000,001,002,003,004,005,006, 007, 008,009,010,011,012,013,014,015
+int[][] timeLine = { {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000},
+                     {000,000,000,000,000,000,000, 000, 000,000,000,000,000,000,000,000}
+                };
+                
+void setup() {
+   size(640, 360);
+     cp5 = new ControlP5(this);        
+
+  s1 = cp5.addSlider("Milliseconds")
+     .setColorLabel(0) 
+     .setPosition(20,330)
+     .setWidth(500)
+     .setHeight(25)
+     .setRange(0,63) // values can range from big to small as well
+     .setValue(.2)
+     .setColorTickMark(0) 
+     .setNumberOfTickMarks(60)
+     .setSliderMode(Slider.FLEXIBLE)
+     ;
+    cp5.addButton("buttonScan")
+     .setPosition(20,275)
+     .setImages(loadImage("button_scan_green.png"), loadImage("button_scan_blue.png"),loadImage("button_scan_orange.png"))
+     .updateSize();
+    cp5.addButton("buttonLive")
+     .setPosition(130,275)
+     .setImages(loadImage("button_live_green.png"), loadImage("button_live_red.png"),loadImage("button_scan_green.png"))
+     .updateSize();
+    cp5.addButton("buttonReset")
+     .setPosition(500,275)
+     .setImages(loadImage("button_reset_green.png"), loadImage("button_reset_blue.png"),loadImage("button_reset_orange.png"))
+     .updateSize();
+     
+    cp5.addButton("alligator_50")
+     .setPosition(10,10)
+     .setImages(loadImage("alligator_50.png"),loadImage("chiprobotakagareth.png"),loadImage("chiprobotakagareth.png"))
+     .updateSize();
+    cp5.addButton("Hackadayio")
+     .setPosition(470,2)
+     .setImages(loadImage("hackadaymetal25.png"),loadImage("hackadaymetal25.png"),loadImage("hackadaymetal25.png"))
+     .updateSize();
+     
+  printArray(Serial.list());      // print list of active serial ports
+  myPort = new Serial(this, Serial.list()[1], 38400);  // adjust serial port number to suit
+ 
+  colorMode(HSB);
+    blobs[0] = new Blob(555,133);
+    blobs[1] = new Blob(490,127);
+    blobs[2] = new Blob(430,115);
+    blobs[3] = new Blob(357,140);
+    blobs[4] = new Blob(255,160);
+    blobs[5] = new Blob(154,145);
+    blobs[6] = new Blob(85,138);
+    
+    blobs[7] = new Blob(425,175);
+    
+    blobs[8] = new Blob(552,193);
+    blobs[9] = new Blob(488,213);
+    blobs[10] = new Blob(424,238);
+    blobs[11] = new Blob(364,226);
+    blobs[12] = new Blob(294,222);
+    blobs[13] = new Blob(214,214);
+    blobs[14] = new Blob(141,209);
+    blobs[15] = new Blob(72,203);
+    bot = loadShape("soles.svg");
+}
+void draw() {
+
+//int w=0;
+ for (int x1 = 0; x1 <= 63; x1++) {
+ for (int x = 0; x <= 15; x++) {
+  if (myPort.available() > 0) 
+  {
+    int lowByte = myPort.read();
+    delay(3);
+    int highByte = myPort.read();
+    int value = highByte * 256 + lowByte;
+    timeLine[x1][x]=value/2;
+    println(x,x1,value,"<"); 
+  }
+ 
+  //println(">");println("");
+ }
+ }
+ //println("sample >",s); 
+ //s++;
+  loadPixels();
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      int index = x + y * width;
+      float sum = 0;
+      for (Blob b : blobs) {
+        float d = dist(x, y, b.pos.x, b.pos.y);
+        w=timeLine[int(s1.getValue())][int(q)];
+        sum += 10 *  w / d;
+        q=q+1;
+       // println(b.r);
+       // delay(1);
+      }
+      q=0;
+      pixels[index] = color(sum, 255, 255);
+    }
+  }
+  updatePixels();
+ shape(bot, -90, -50, 800, 450);
+  //for (Blob b : blobs) {
+   //float r= s1.getValue();
+  //println(b.r);
+  //}
+ }
+
+public void controlEvent(ControlEvent theEvent) {
+  println(theEvent.getController().getName());
+  
+}
+// function buttonReset will receive changes from 
+// controller with name buttonReset
+public void buttonReset(int theValue) {
+  println("a button event from buttonReset: "+theValue);
+  myPort.write(82);
+  myColor = color(128);
+}
+// function buttonLive will receive changes from 
+// controller with name buttonScan
+public void buttonLive(int theValue) {
+  println("a button event from buttonLive: "+theValue);
+  
+  myPort.write(76);
+  myColor = color(128);
+}
+// function buttonScan will receive changes from 
+// controller with name buttonA
+public void buttonScan(int theValue) {
+  println("a button event from buttonScan: "+theValue);
+  myPort.write(83);
+  myColor = color(128);
+}
+// function alligator will receive changes from 
+// controller with name alligaitor
+public void alligator (int theValue) {
+  println("a button event from alligator: "+theValue);
+  myColor = color(128);
+}
+// function hackadayio will receive changes from 
+// controller with name hackadayio
+public void hackadayio(int theValue) {
+  println("a button event from buttonScan: "+theValue);
+  
+  myColor = color(128);
+}
