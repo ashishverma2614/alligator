@@ -1,0 +1,36 @@
+// upload this to the Arduino/atmel chip, and use the version 13 Processing code to display the GUI
+#include <SoftwareSerial.h>
+#include <MCP3008.h>
+ int16_t adc[32];
+#define CS_PIN1 3
+#define CLOCK_PIN1 4
+#define MOSI_PIN1 5
+#define MISO_PIN1 6
+#define CS_PIN2 7
+#define CLOCK_PIN2 8
+#define MOSI_PIN2 9
+#define MISO_PIN2 10
+int val1,val2;
+ unsigned long  a;  
+ unsigned long  b;
+// put pins inside MCP3008 constructor
+MCP3008 adc1(CLOCK_PIN1, MOSI_PIN1, MISO_PIN1, CS_PIN1);
+MCP3008 adc2(CLOCK_PIN2, MOSI_PIN2, MISO_PIN2, CS_PIN2);
+//SoftwareSerial SoleSerial(10,11); // RX, TX
+void setup() { 
+ // SoleSerial.begin(38400);  //SoleSerial.println("Hello, world?");
+  Serial.begin(38400);
+ 
+}
+void loop() {
+   a = millis();
+for (int i=0; i <= 7; i++){adc[i] = adc1.readADC(i); }
+for (int i=0; i <= 7; i++){adc[i+8] = adc2.readADC(i);  }   
+  //Serial.println("");
+   b = millis();
+    for (int i=0; i <= 15; i++){
+  Serial.print(adc[i]);Serial.print(" ");
+  }
+  Serial.print(b-a);Serial.println(" millis");
+}
+
